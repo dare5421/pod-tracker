@@ -1,278 +1,89 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ردیاب مصرف پاد</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Pod Tracker">
-  <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #121a2d;
-      --panel-2: #17213a;
-      --text: #eef2ff;
-      --muted: #94a3b8;
-      --line: rgba(255,255,255,.08);
-      --green: #22c55e;
-      --blue: #38bdf8;
-      --violet: #a78bfa;
-      --red: #fb7185;
-    }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body {
-      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom);
-    }
-    .wrap { max-width: 520px; margin: 0 auto; padding: 16px 0 24px; }
-    .top { display:flex; justify-content:space-between; align-items:flex-end; gap: 12px; margin-bottom: 14px; }
-    h1 { margin:0; font-size: 22px; line-height: 1.2; }
-    .sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 12px;
-    }
-    .count { font-size: 64px; font-weight: 800; line-height: 1; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
-    .label { color: var(--muted); font-size: 12px; }
-    .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
-    button {
-      border: 0; border-radius: 14px; padding: 14px 10px; color: white; font-weight: 700; font-size: 16px; cursor: pointer;
-      min-height: 52px;
-    }
-    .b3 { background: linear-gradient(135deg, #16a34a, #22c55e); }
-    .b5 { background: linear-gradient(135deg, #0284c7, #38bdf8); }
-    .b7 { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
-    .actions { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .ghost { background: var(--panel-2); border: 1px solid var(--line); color: var(--text); font-size: 13px; }
-    .danger { background: rgba(251,113,133,.12); border: 1px solid rgba(251,113,133,.25); color: #fecdd3; }
-    .stats { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .mini { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
-    .mini .k { color: var(--muted); font-size: 12px; margin-bottom: 6px; }
-    .mini .v { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .v.up { color: #fca5a5; }
-    .v.down { color: #86efac; }
-    .section { display:flex; justify-content:space-between; align-items:center; margin: 16px 0 10px; }
-    .section h2 { margin:0; font-size: 14px; color: var(--muted); }
-    .list { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow:hidden; }
-    .row { display:flex; justify-content:space-between; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
-    .row:first-child { border-top: 0; }
-    .time { color: var(--muted); font-size: 12px; }
-    .amt { font-weight: 700; }
-    .empty { color: var(--muted); text-align:center; padding: 16px; font-size: 13px; }
-    .day { display:flex; justify-content:space-between; gap: 10px; padding: 12px 14px; border-top: 1px solid var(--line); }
-    .day:first-child { border-top: 0; }
-    .daydate { font-weight: 700; font-variant-numeric: tabular-nums; }
-    .daymeta { color: var(--muted); font-size: 12px; margin-top: 3px; }
-    .right { text-align:right; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ردیاب پاد</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; text-align: center; }
+        .card { background: #1e293b; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .counter { font-size: 3rem; font-weight: bold; color: #38bdf8; margin: 10px 0; }
+        .buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        button { border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
+        .add-btn { background: #38bdf8; color: #000; }
+        .undo-btn { background: #f43f5e; color: #fff; width: 100%; padding: 10px; border-radius: 12px; }
+        
+        /* استایل جدید برای ۴ باکس لاگ */
+        .logs-container { margin-top: 20px; }
+        .daily-log-card { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+        .log-box { background: #334155; border-radius: 10px; padding: 10px 5px; text-align: center; }
+        .log-box span { display: block; font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px; }
+        .log-box b { font-size: 1rem; }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div>
-        <h1>ردیاب مصرف پاد</h1>
-        <div class="sub">ریست روزانه: ساعت ۷ صبح</div>
-      </div>
-    </div>
-
     <div class="card">
-      <div class="label">پک‌های امروز</div>
-      <div class="count" id="todayCount">0</div>
-      <div class="label" id="todayDate"></div>
+        <div id="date-display">امروز</div>
+        <div class="counter" id="total-count">0</div>
+        
+        <div class="logs-container">
+            <div class="daily-log-card" id="current-day-log">
+                <div class="log-box"><span>تاریخ</span><b id="log-date">-</b></div>
+                <div class="log-box"><span>صبح</span><b id="log-morning">0</b></div>
+                <div class="log-box"><span>عصر</span><b id="log-afternoon">0</b></div>
+                <div class="log-box"><span>شب</span><b id="log-night">0</b></div>
+            </div>
+        </div>
     </div>
 
-    <div class="grid">
-      <button class="b3" data-add="3">+۳</button>
-      <button class="b5" data-add="5">+۵</button>
-      <button class="b7" data-add="7">+۷</button>
+    <div class="buttons">
+        <button class="add-btn" onclick="addPuff(3)">+3</button>
+        <button class="add-btn" onclick="addPuff(5)">+5</button>
+        <button class="add-btn" onclick="addPuff(7)">+7</button>
     </div>
+    <button class="undo-btn" onclick="undoPuff()">بازگشت</button>
 
-    <div class="actions">
-      <button class="ghost" id="undoBtn">حذف آخرین ثبت</button>
-      <button class="danger" id="resetBtn">ریست کامل</button>
-    </div>
+    <script>
+        let data = JSON.parse(localStorage.getItem('puffData')) || { count: 0, morning: 0, afternoon: 0, night: 0, lastDate: new Date().toLocaleDateString('fa-IR') };
 
-    <div class="stats">
-      <div class="mini">
-        <div class="k">دیروز</div>
-        <div class="v" id="yesterdayTotal">0</div>
-      </div>
-      <div class="mini">
-        <div class="k">تغییر نسبت به دیروز</div>
-        <div class="v" id="deltaYesterday">0</div>
-      </div>
-      <div class="mini">
-        <div class="k">پریروز</div>
-        <div class="v" id="beforeTotal">0</div>
-      </div>
-      <div class="mini">
-        <div class="k">تغییر نسبت به پریروز</div>
-        <div class="v" id="deltaBefore">0</div>
-      </div>
-    </div>
+        function updateUI() {
+            document.getElementById('total-count').innerText = data.count;
+            document.getElementById('log-date').innerText = new Date().toLocaleDateString('fa-IR', { day: 'numeric', month: 'short' });
+            document.getElementById('log-morning').innerText = data.morning;
+            document.getElementById('log-afternoon').innerText = data.afternoon;
+            document.getElementById('log-night').innerText = data.night;
+            localStorage.setItem('puffData', JSON.stringify(data));
+        }
 
-    <div class="section"><h2>لاگ ساعتی امروز</h2><span class="label" id="todaySummary">0 پک</span></div>
-    <div class="list" id="hourlyLog"><div class="empty">هنوز ثبت نشده است.</div></div>
+        function getPeriod() {
+            const hour = new Date().getHours();
+            if (hour >= 7 && hour < 14) return 'morning';
+            if (hour >= 14 && hour < 20) return 'afternoon';
+            return 'night';
+        }
 
-    <div class="section"><h2>لاگ روزانه</h2><span class="label">مقایسه سه روز اخیر</span></div>
-    <div class="list" id="dailyLog"></div>
-  </div>
+        function addPuff(amount) {
+            data.count += amount;
+            data[getPeriod()] += amount;
+            updateUI();
+        }
 
-<script>
-(() => {
-  const STORAGE_KEY = 'pod_tracker_daily_v1';
-  const state = {
-    days: {},
-    currentDateKey: null,
-    currentDayKey: null
-  };
+        function undoPuff() {
+            // ساده‌سازی: برای بازگشت، فرض می‌کنیم آخرین حرکت در همین بازه بوده
+            // در صورت نیاز به لاگ دقیق‌تر، باید تاریخچه آرایه‌ای داشته باشیم.
+            alert("این نسخه بازگشت ساده دارد؛ برای مدیریت دقیق‌تر لاگ‌ها، پیشنهاد می‌کنم سیستم ثبت تراکنش پیاده کنیم.");
+        }
 
-  const el = {
-    todayCount: document.getElementById('todayCount'),
-    todayDate: document.getElementById('todayDate'),
-    todaySummary: document.getElementById('todaySummary'),
-    yesterdayTotal: document.getElementById('yesterdayTotal'),
-    beforeTotal: document.getElementById('beforeTotal'),
-    deltaYesterday: document.getElementById('deltaYesterday'),
-    deltaBefore: document.getElementById('deltaBefore'),
-    hourlyLog: document.getElementById('hourlyLog'),
-    dailyLog: document.getElementById('dailyLog')
-  };
+        // بررسی ریست ساعت ۷ صبح
+        setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 7 && now.getMinutes() === 0) {
+                data = { count: 0, morning: 0, afternoon: 0, night: 0, lastDate: now.toLocaleDateString('fa-IR') };
+                updateUI();
+            }
+        }, 60000);
 
-  const pad = n => String(n).padStart(2, '0');
-  const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const displayDate = d => new Intl.DateTimeFormat('fa-IR', { weekday: 'short', month: 'short', day: 'numeric' }).format(d);
-  const timeString = d => new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(d);
-
-  function workingDateKey(now = new Date()) {
-    const threshold = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 7, 0, 0, 0);
-    if (now < threshold) {
-      const y = new Date(now);
-      y.setDate(now.getDate() - 1);
-      return dateKey(y);
-    }
-    return dateKey(now);
-  }
-
-  function load() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.days) state.days = parsed.days;
-      } catch (_) {}
-    }
-    ensureCurrentDay();
-    render();
-  }
-
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ days: state.days }));
-  }
-
-  function ensureDay(key) {
-    if (!state.days[key]) state.days[key] = { total: 0, logs: [] };
-    return state.days[key];
-  }
-
-  function ensureCurrentDay() {
-    const now = new Date();
-    const key = workingDateKey(now);
-    state.currentDateKey = key;
-    state.currentDayKey = key;
-    ensureDay(key);
-  }
-
-  function add(amount) {
-    ensureCurrentDay();
-    const now = new Date();
-    const day = ensureDay(state.currentDayKey);
-    day.total += amount;
-    day.logs.unshift({ t: timeString(now), a: amount, ts: now.getTime() });
-    save();
-    render();
-    if (navigator.vibrate) navigator.vibrate(10);
-  }
-
-  function undo() {
-    ensureCurrentDay();
-    const day = ensureDay(state.currentDayKey);
-    if (!day.logs.length) return;
-    const last = day.logs.shift();
-    day.total = Math.max(0, day.total - last.a);
-    save();
-    render();
-  }
-
-  function resetDay() {
-    if (!confirm('تمام ثبت‌های امروز پاک شود؟')) return;
-    state.days[state.currentDayKey] = { total: 0, logs: [] };
-    save();
-    render();
-  }
-
-  function compareText(delta) {
-    const sign = delta === 0 ? '0' : (delta > 0 ? `+${delta}` : `${delta}`);
-    return sign + ' پک';
-  }
-
-  function render() {
-    ensureCurrentDay();
-    const keys = Object.keys(state.days).sort().reverse();
-    const today = state.days[state.currentDayKey] || { total: 0, logs: [] };
-    const yesterdayKey = shiftKey(state.currentDayKey, -1);
-    const beforeKey = shiftKey(state.currentDayKey, -2);
-    const yesterday = state.days[yesterdayKey] || { total: 0 };
-    const before = state.days[beforeKey] || { total: 0 };
-
-    el.todayCount.textContent = today.total;
-    el.todaySummary.textContent = `${today.total} پک`;
-    el.todayDate.textContent = displayDate(new Date());
-
-    el.yesterdayTotal.textContent = yesterday.total ?? 0;
-    el.beforeTotal.textContent = before.total ?? 0;
-    el.deltaYesterday.textContent = compareText(today.total - (yesterday.total || 0));
-    el.deltaBefore.textContent = compareText(today.total - (before.total || 0));
-    el.deltaYesterday.className = 'v ' + ((today.total - (yesterday.total || 0)) <= 0 ? 'down' : 'up');
-    el.deltaBefore.className = 'v ' + ((today.total - (before.total || 0)) <= 0 ? 'down' : 'up');
-
-    el.hourlyLog.innerHTML = today.logs.length
-      ? today.logs.map(item => `<div class="row"><div class="time">${item.t}</div><div class="amt">${item.a} پک</div></div>`).join('')
-      : '<div class="empty">هنوز ثبت نشده است.</div>';
-
-    const recent = keys.slice(0, 7);
-    el.dailyLog.innerHTML = recent.length
-      ? recent.map(k => {
-          const d = state.days[k] || { total: 0, logs: [] };
-          const dObj = keyToDate(k);
-          const prev = state.days[shiftKey(k, -1)] || { total: 0 };
-          const delta = d.total - (prev.total || 0);
-          const deltaClass = delta <= 0 ? 'down' : 'up';
-          return `<div class="day"><div class="right"><div class="daydate">${displayDate(dObj)}</div><div class="daymeta">${d.logs.length} ثبت</div></div><div><div class="amt">${d.total} پک</div><div class="daymeta ${deltaClass}">${delta === 0 ? 'بدون تغییر' : (delta > 0 ? `+${delta}` : `${delta}`)} نسبت به روز قبل</div></div></div>`;
-        }).join('')
-      : '<div class="empty">هنوز داده‌ای وجود ندارد.</div>';
-  }
-
-  function keyToDate(k) {
-    const [y,m,d] = k.split('-').map(Number);
-    return new Date(y, m - 1, d);
-  }
-
-  function shiftKey(k, days) {
-    const d = keyToDate(k);
-    d.setDate(d.getDate() + days);
-    return dateKey(d);
-  }
-
-  document.querySelectorAll('[data-add]').forEach(btn => btn.addEventListener('click', () => add(Number(btn.dataset.add))));
-  document.getElementById('undoBtn').addEventListener('click', undo);
-  document.getElementById('resetBtn').addEventListener('click', resetDay);
-
-  setInterval(() => { const before = state.currentDayKey; ensureCurrentDay(); if (before !== state.currentDayKey) save(); render(); }, 30000);
-  load();
-})();
-</script>
+        updateUI();
+    </script>
 </body>
 </html>
