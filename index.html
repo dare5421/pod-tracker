@@ -8,12 +8,11 @@
         body { font-family: -apple-system, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; text-align: center; }
         .card { background: #1e293b; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .counter { font-size: 3rem; font-weight: bold; color: #38bdf8; margin: 10px 0; }
-        .buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
         button { border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
         .add-btn { background: #38bdf8; color: #000; }
-        .undo-btn { background: #f43f5e; color: #fff; width: 100%; padding: 10px; border-radius: 12px; margin-bottom: 20px; }
+        .undo-btn { background: #ef4444; color: #fff; width: 100%; padding: 12px; border-radius: 12px; margin-bottom: 20px; }
         
-        /* استایل ۴ قسمتی */
         .log-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
         .log-box { background: #334155; border-radius: 10px; padding: 8px 2px; text-align: center; }
         .log-box span { display: block; font-size: 0.65rem; opacity: 0.7; margin-bottom: 2px; }
@@ -39,7 +38,8 @@
         <button class="add-btn" onclick="addPuff(5)">+5</button>
         <button class="add-btn" onclick="addPuff(7)">+7</button>
     </div>
-    <button class="undo-btn" onclick="undoPuff()">بازگشت</button>
+    
+    <button class="undo-btn" onclick="undoPuff()">اصلاح آخرین حرکت</button>
 
     <h3>تاریخچه</h3>
     <div id="history-list"></div>
@@ -50,15 +50,15 @@
             count: 0, morning: 0, afternoon: 0, night: 0 
         };
         let history = JSON.parse(localStorage.getItem('puffHistory')) || [];
+        let lastAction = JSON.parse(localStorage.getItem('lastAction')) || null;
 
         function updateUI() {
             document.getElementById('total-count').innerText = data.count;
-            document.getElementById('log-date').innerText = data.date.split('/')[2]; // نمایش روز
+            document.getElementById('log-date').innerText = data.date.split('/')[2];
             document.getElementById('log-morning').innerText = data.morning;
             document.getElementById('log-afternoon').innerText = data.afternoon;
             document.getElementById('log-night').innerText = data.night;
             
-            // رندر تاریخچه
             const histList = document.getElementById('history-list');
             histList.innerHTML = '';
             [...history].reverse().forEach(item => {
@@ -78,6 +78,7 @@
 
             localStorage.setItem('puffData', JSON.stringify(data));
             localStorage.setItem('puffHistory', JSON.stringify(history));
+            localStorage.setItem('lastAction', JSON.stringify(lastAction));
         }
 
         function getPeriod() {
@@ -88,22 +89,31 @@
         }
 
         function addPuff(amount) {
+            const period = getPeriod();
             data.count += amount;
-            data[getPeriod()] += amount;
+            data[period] += amount;
+            lastAction = { amount: amount, period: period };
             updateUI();
         }
 
         function undoPuff() {
-            alert("قابلیت بازگشت در نسخه تاریخچه‌دار نیازمند سیستم دقیق‌تر است؛ فعلاً به سادگی ثبت کنید.");
+            if (!lastAction) {
+                alert("حرکتی برای اصلاح وجود ندارد.");
+                return;
+            }
+            data.count -= lastAction.amount;
+            data[lastAction.period] -= lastAction.amount;
+            lastAction = null; // جلوگیری از اصلاح دوباره (فقط یک لایه اصلاح)
+            updateUI();
         }
 
-        // بررسی ریست ساعت ۷ صبح
         function checkReset() {
             const now = new Date();
             const todayStr = now.toLocaleDateString('fa-IR');
             if (now.getHours() === 7 && data.date !== todayStr) {
                 history.push({...data});
                 data = { date: todayStr, count: 0, morning: 0, afternoon: 0, night: 0 };
+                lastAction = null;
                 updateUI();
             }
         }
